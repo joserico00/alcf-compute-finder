@@ -1,0 +1,4 @@
+# ALCF Compute Finder
+# streamlit >= 1.46 is required for st.dataframe(width="stretch")
+streamlit>=1.46
+pandas>=2.0
