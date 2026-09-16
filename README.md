@@ -110,3 +110,7 @@ experience use Option A; for zero-infrastructure hosting use Option B.
 Hardware, queues, and policies change. Confirm with the linked ALCF
 documentation or support@alcf.anl.gov before making capacity or proposal
 decisions.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
