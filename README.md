@@ -87,6 +87,10 @@ there — but the included `index.html` runs the app **in the browser** with
 3. After a minute, the app is live at
    `https://<username>.github.io/<repo-name>/`.
 
+`index.html` pins the stlite version it loads from the CDN, so an upstream
+release cannot change the deployed page on its own; bump the version in both
+URLs when you want a newer one.
+
 Trade-off: the first visit downloads the Python runtime (roughly 20–60 s,
 cached afterwards), and everything runs client-side. For a snappier
 experience use Option A; for zero-infrastructure hosting use Option B.

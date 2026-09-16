@@ -9,8 +9,9 @@ Run with:  streamlit run app.py
 -----------------------------------------------------------------------------
 SPEC PROVENANCE
 -----------------------------------------------------------------------------
-Every number below was checked on 2026-08-19 against ALCF's own pages. Sources
-are recorded per system in SYSTEMS[...]["sources"]. Primary references:
+Every number below was checked against ALCF's own pages on the date in
+LAST_VERIFIED, which the UI shows so users know how stale the data may be.
+Sources are recorded per system in SYSTEMS[...]["sources"]. Primary references:
 
   Aurora     https://www.alcf.anl.gov/aurora   + https://docs.alcf.anl.gov/aurora/
   Polaris    https://www.alcf.anl.gov/polaris  + https://docs.alcf.anl.gov/polaris/
@@ -22,20 +23,7 @@ are recorded per system in SYSTEMS[...]["sources"]. Primary references:
   AI Testbed https://docs.alcf.anl.gov/ai-testbed/ + https://www.alcf.anl.gov/alcf-ai-testbed
   Inference  https://docs.alcf.anl.gov/services/inference-endpoints/
 
-Hardware and queue policies change. LAST_VERIFIED is shown in the UI so users
-know how stale the data may be. Re-check before making capacity decisions.
-
------------------------------------------------------------------------------
-CHANGES IN THIS VERSION
------------------------------------------------------------------------------
-* Ranking transparency: evaluate() now returns a point-by-point breakdown and
-  the UI shows exactly how every score was computed.
-* Compare mode: pick 2-3 systems and see them side by side.
-* All systems tab: free-text search, family/status filters, CSV export.
-* "New here?" tab: plain-English glossary + interactive first-week checklist.
-* Fixes: failed minimums now read "only N ..."; systems with unpublished node
-  counts no longer silently satisfy a node-scale requirement; doc links in the
-  ranked list are separated instead of run together.
+Hardware and queue policies change. Re-check before making capacity decisions.
 """
 
 import pandas as pd

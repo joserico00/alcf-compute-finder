@@ -9,10 +9,10 @@
   Notes:
   * First load downloads the Python runtime (~tens of MB) - give it ~20-60 s
     once; it is cached afterwards.
-  * The CDN URLs below track the latest @stlite/browser release. For a
-    production deployment, pin a version, e.g.
-    https://cdn.jsdelivr.net/npm/@stlite/browser@0.86.0/build/stlite.js
-    (check https://github.com/whitphx/stlite/releases for the current one).
+  * The CDN URLs below are pinned to one @stlite/browser release, so an
+    upstream change cannot alter this page without a commit here. To move to
+    a newer one, bump the version in both URLs and reload; the releases are
+    listed at https://github.com/whitphx/stlite/releases.
 -->
 <html>
   <head>
@@ -21,7 +21,7 @@
     <title>ALCF Compute Finder</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@stlite/browser/build/stlite.css"
+      href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.9.1/build/stlite.css"
     />
     <style>
       /* Simple loading message shown until Pyodide finishes booting */
@@ -40,7 +40,7 @@
       </div>
     </div>
     <script type="module">
-      import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser/build/stlite.js";
+      import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.9.1/build/stlite.js";
       mount(
         {
           requirements: ["pandas"],

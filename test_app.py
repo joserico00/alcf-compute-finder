@@ -9,13 +9,15 @@ Run either way:
 Uses Streamlit's official AppTest harness: it executes the real app script
 headlessly, drives the sidebar widgets, and inspects the rendered output.
 
-Sidebar widget order (indices used below):
-    selectbox[0] = task     selectbox[1] = scale      selectbox[2] = hardware
-    slider[0]    = min accelerators/node
-    slider[1]    = min accelerator memory (GB)
-    slider[2]    = min CPU cores
-    slider[3]    = min CPU memory (GB)
-    checkbox[0]  = notebooks   checkbox[1] = available now   checkbox[2] = hide misses
+Widgets are addressed by the key they are created with in app.py, not by their
+position in the sidebar. Position broke silently once already: the "Common
+scenarios" preset was added above the task dropdown, so selectbox[0] became the
+preset and every test that set a task failed inside Streamlit instead of
+reporting a wrong recommendation.
+
+    task_sel  scale_sel  accel_sel        the three dropdowns
+    min_accel_sl  min_accel_mem_sl        the minimum sliders
+    nb_chk                                the JupyterHub checkbox
 """
 
 from streamlit.testing.v1 import AppTest
@@ -27,19 +29,14 @@ def run_app(task=None, scale=None, hardware=None,
     at.run()
     assert not at.exception, f"App raised on first run: {at.exception}"
 
-    sb = at.sidebar
-    if task is not None:
-        sb.selectbox[0].select(task)
-    if scale is not None:
-        sb.selectbox[1].select(scale)
-    if hardware is not None:
-        sb.selectbox[2].select(hardware)
-    if min_accel is not None:
-        sb.slider[0].set_value(min_accel)
-    if min_accel_mem is not None:
-        sb.slider[1].set_value(min_accel_mem)
+    for key, value in [("task_sel", task), ("scale_sel", scale), ("accel_sel", hardware)]:
+        if value is not None:
+            at.selectbox(key=key).select(value)
+    for key, value in [("min_accel_sl", min_accel), ("min_accel_mem_sl", min_accel_mem)]:
+        if value is not None:
+            at.slider(key=key).set_value(value)
     if notebooks is not None:
-        sb.checkbox[0].set_value(notebooks)
+        at.checkbox(key="nb_chk").set_value(notebooks)
 
     at.run()
     assert not at.exception, f"App raised after widget changes: {at.exception}"
@@ -105,9 +102,11 @@ def test_impossible_requirement_shows_warning():
 
 
 def test_unknown_specs_never_satisfy_minimums():
-    # Systems with unpublished per-node accel counts (e.g. SambaNova) must not
-    # win when a per-node accelerator minimum is set. With min 8/node the only
-    # clean GPU answers are Sophia (8) and GroqRack (8).
+    # A minimum of 8 accelerators per node has to be met by a published number,
+    # not by a system that never states one: the Inference Service is ruled out
+    # rather than let through. Sophia, GroqRack and the SambaNova SN30 all
+    # publish 8 per node, and for training the first two outrank the SN30.
+    # test_logic.py checks the same rule directly against the system data.
     at = run_app(task="Train or fine-tune a model", min_accel=8)
     assert best_match(at) in {"Sophia", "GroqRack"}
 
